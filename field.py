@@ -15,7 +15,6 @@ class Field:
         return [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
 
     def add_boat(self, boat_length):
-        print("check a")
         boat_field = NewBoatField()
         row = get_random_int(10)
         col = get_random_int(10)
