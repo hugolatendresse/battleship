@@ -11,22 +11,16 @@ class NewBoatField:
             self.add_around(row=row, col=colright, boat_length=boat_length)
         for colright in range(col, col+boat_length):
             self.arr[row][colright] = boat_length
-        print("added across with {} row {} col {} boat_length".format(row,col,boat_length))
-        print(self.arr)
         if self.arr.sum()==0:
             raise Exception
-        pass
 
     def add_down(self,row, col, boat_length):
         for rowdown in range(row, row+boat_length):
             self.add_around(row=rowdown, col=col, boat_length=boat_length)
         for rowdown in range(row, row+boat_length):
             self.arr[rowdown][col] = boat_length
-        print("added down with {} row {} col {} boat_length".format(row,col,boat_length))
-        print(self.arr)
         if self.arr.sum()==0:
             raise Exception
-        pass
 
     def add_around(self, row, col, boat_length):
         for row_inc in [-1, 0, 1]:
