@@ -4,18 +4,25 @@ from get_random_int import get_random_int
 class NewBoatField:
     def __init__(self):
         self.arr = np.zeros((10, 10))
+        self.arr2 = None
 
     def add_across(self,row, col, boat_length):
-        for rowright in range(row, row+boat_length):
-            self.arr[rowright][col] = 5
-        for rowright in range(row, row+boat_length):
-            self.add_around(row=rowright, col=col)
+        for colright in range(col, col+boat_length):
+            self.add_around(row=row, col=colright)
+        for colright in range(col, col+boat_length):
+            self.arr[row][colright] = 5
+        print("added across with {} row {} col {} boat_length".format(row,col,boat_length))
+        print(self.arr)
+        pass
 
     def add_down(self,row, col, boat_length):
-        for coldown in range(col, col+boat_length):
-            self.add_around(row=row, col=coldown)
-        for coldown in range(col, col+boat_length):
-            self.arr[row][coldown] = 5
+        for rowdown in range(row, row+boat_length):
+            self.add_around(row=rowdown, col=col)
+        for rowdown in range(row, row+boat_length):
+            self.arr[rowdown][col] = 5
+        print("added down with {} row {} col {} boat_length".format(row,col,boat_length))
+        print(self.arr)
+        pass
 
     def add_boat_and_around(self, row, col):
         self.add_one_boat_spot(row=row, col=col)
