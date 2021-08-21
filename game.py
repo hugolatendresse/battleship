@@ -134,7 +134,7 @@ class Game:
     def switch_turn(self):
         if self.turn == "player1":
             self.turn = "player2"
-        if self.turn == "player2":
+        elif self.turn == "player2":
             self.turn = "player1"
 
 """
