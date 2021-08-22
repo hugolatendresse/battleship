@@ -41,13 +41,7 @@ class Field:
             return self.add_boat(boat_length)
 
     def access(self, row, col):
-        try:
-            return self.arr[row, col]
-        except Exception:
+        if (row<0)|(row>9)|(col<0)|(col>9):
             return 0
-
-    def update(self, row, col, value):
-        try:
-            self.arr[row, col] = value
-        except Exception:
-            pass
+        else:
+            return self.arr[row, col]

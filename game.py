@@ -13,6 +13,8 @@ class Game:
         self.game_type = game_type
         self.player1 = Player()
         self.player2 = Player()
+        self.player2.other_play_secret_arr = self.player1.board.arr # TODO remove
+        self.player1.other_play_secret_arr = self.player2.board.arr # TODO remove
         self.turn = "player1"
         self.winner = ""
         self.verbose = verbose

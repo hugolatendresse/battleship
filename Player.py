@@ -1,11 +1,11 @@
+import random
 import numpy as np
-
 from field import Field
-from get_random_int import get_random_int
 
 
 class Player:
-    def __init__(self):
+    def __init__(self, other_play_arr=None):
+        self.other_play_secret_arr=other_play_arr
         self.board = Field()
         self.board.add_all_boats()
         self.screen = Field()
@@ -13,20 +13,33 @@ class Player:
         self.shots_fired = 0
         self.new_row = None
         self.new_col = None
+        self.create_available_spots()
+        self.available_spots = [(i,j) for i in range(10) for j in range(10)]
+
+    def create_available_spots(self):
+        spots1 = [(i, i) for i in range(1,9)]
+        random.shuffle(spots1)
+        spots2 = [(9-i, i) for i in range(1,9)]
+        random.shuffle(spots2)
+        self.available_spots = spots1 + spots2
+        spots3 = list(set([(i,j) for i in range(10) for j in range(10)]) - set(self.available_spots))
+        random.shuffle(spots3)
+        self.available_spots += spots3
+        assert len(self.available_spots)==100
 
     @property
     def reward(self):
         return self.screen.arr.sum() - self.shots_fired
 
     def choose_random(self):
-        self.select_random_row_and_col()
-        while (self.screen.arr[self.new_row, self.new_col] != -1) | (not self.is_all_diagonals_empty) | (not self.is_no_neighboor_sunk):
-            self.select_random_row_and_col()
+        self.new_row, self.new_col = self.available_spots.pop(0)
+        pass
+        while (self.screen.arr[self.new_row, self.new_col] != -1) | (not self.is_no_neighboor_sunk) | (not self.is_all_diagonals_empty):
+            if self.other_play_secret_arr[self.new_row, self.new_col]>0:
+                pass
+            self.new_row, self.new_col = self.available_spots.pop(0)
+            pass
         return self.new_row, self.new_col
-
-    def select_random_row_and_col(self):
-        self.new_row = get_random_int(10)
-        self.new_col = get_random_int(10)
 
     @property
     def is_all_diagonals_empty(self):
@@ -62,31 +75,19 @@ class Player:
 
     @property
     def up(self):
-        try:
-            return self.screen.arr[self.new_row + 1, self.new_col]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row-1, self.new_col)
 
     @property
     def down(self):
-        try:
-            return self.screen.arr[self.new_row - 1, self.new_col]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row+1, self.new_col)
 
     @property
     def left(self):
-        try:
-            return self.screen.arr[self.new_row, self.new_col-1]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row, self.new_col-1)
 
     @property
     def right(self):
-        try:
-            return self.screen.arr[self.new_row, self.new_col+1]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row, self.new_col+1)
 
     def finish_a_boat(self):
         for self.new_row, self.new_col in zip(*np.where(self.screen.arr==10)):
@@ -105,31 +106,18 @@ class Player:
             else:
                 return self.choose_random()
 
-
     @property
     def up_right(self):
-        try:
-            return self.screen.arr[self.new_row-1, self.new_col+1]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row-1, self.new_col+1)
 
     @property
     def down_right(self):
-        try:
-            return self.screen.arr[self.new_row+1, self.new_col+1]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row+1, self.new_col+1)
 
     @property
     def up_left(self):
-        try:
-            return self.screen.arr[self.new_row-1, self.new_col-1]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row-1, self.new_col-1)
 
     @property
     def down_left(self):
-        try:
-            return self.screen.arr[self.new_row+1, self.new_col-1]
-        except Exception:
-            return 0
+        return self.screen.access(self.new_row+1, self.new_col-1)
