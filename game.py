@@ -68,7 +68,7 @@ class Game:
         while self.shooter.screen.access(self.row, self.col) != -1:
             if self.game_type == "machine_vs_machine":
                 self.row, self.col = self.shooter.pick()
-            if self.game_type == "random_vs_random":
+            elif self.game_type == "random_vs_random":
                 self.row, self.col = self.shooter.choose_random()
             elif self.game_type == "human_vs_human":
                 while (self.row == -1) | (self.col == -1):
