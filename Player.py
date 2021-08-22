@@ -44,16 +44,21 @@ class Player:
 
     def pick(self):
         if self.shots_fired < 10:
-            return self.shots_fired, self.shots_fired
+            return self.try_returning(self.shots_fired, self.shots_fired)
         elif self.shots_fired<20:
-            if ((19-self.shots_fired) != (self.shots_fired-10)):
-                return 19-self.shots_fired, self.shots_fired-10
-            else:
-                return self.choose_random()
+            new_row = 19-self.shots_fired
+            new_col = self.shots_fired-10
+            return self.try_returning(new_row, new_col)
         elif (self.screen.arr==10).sum()>0:
             return self.finish_a_boat()
         else:
-            return self.choose_random() # TODO can do better!
+            return self.choose_random()
+
+    def try_returning(self, row, col):
+        if self.screen.arr[row, col] == -1:
+            return row, col
+        else:
+            return self.choose_random()
 
     @property
     def up(self):
