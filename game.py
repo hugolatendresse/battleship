@@ -1,4 +1,4 @@
-from copy import copy, deepcopy
+from copy import deepcopy
 
 import numpy as np
 
@@ -7,12 +7,16 @@ from get_random_int import get_random_int
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, game_type="machine_vs_machine", verbose='yes'):
+        """ game_type: machine_vs_machine or human_vs_human
+            verbose: zero, little, or yes"""
+        self.game_type = game_type
         self.player1 = Player()
         self.player2 = Player()
-        self.print_all()
         self.turn = "player1"
-        self.winner = None
+        self.winner = ""
+        self.verbose = verbose
+        self.number_of_shots_to_win = None
 
     def print_all(self):
         print("\nPlayer1: ")
@@ -23,15 +27,22 @@ class Game:
         print(self.player2.board.arr)
         print('\n\n')
 
-    def play_human_vs_human(self):
-        while self.winner is None:
+    def play(self):
+        if self.verbose == "little":
+            self.print_all()
+        while self.winner == "":
+            self.turn = "player1"
             self.player_fires()
-        print("{} has won".format(self.winner))
+            self.turn = "player2"
+            self.player_fires()
+        if self.verbose == "little":
+            self.print_all()
+        self.declare_winner()
+        return self.winner, self.number_of_shots_to_win
 
-    def play_machine_vs_machine(self):
-        while self.winner is None:
-            self.fire_random()
-        print("{} has won".format(self.winner))
+    def declare_winner(self):
+        if self.verbose != "zero":
+            print("{} has won in {} shots".format(self.winner, self.number_of_shots_to_win))
 
     @property
     def shooter(self):
@@ -52,39 +63,42 @@ class Game:
             raise Exception
 
     def player_fires(self):
-        choice = input("Where should {} fire? Input in XY format or press Enter to fire random".format(self.turn))
-        if choice=="":
+        if self.game_type == "machine_vs_machine":
             self.fire_random()
         else:
-            if len(choice)!=2:
-                print("The answer should have two characters (each one a digit)")
-                self.player_fires()
-            try:
-                row=int(choice[0])
-                col=int(choice[1])
-            except Exception:
-                print("The answer should have two characters (each one a digit)")
-                self.player_fires()
-            if (row>9) or (row<0) or (col>9) or (col<0):
-                print("The answer should have two characters (each one a digit betweeen 0 and 9)")
-                self.player_fires()
-            self.fire_selected(row=row, col=col)
+            choice = input("Where should {} fire? Input in XY format or press Enter to fire random".format(self.turn))
+            if choice=="":
+                self.fire_random()
+            else:
+                if len(choice)!=2:
+                    print("The answer should have two characters (each one a digit)")
+                    self.player_fires()
+                try:
+                    row=int(choice[0])
+                    col=int(choice[1])
+                except Exception:
+                    print("The answer should have two characters (each one a digit)")
+                    self.player_fires()
+                if (row>9) or (row<0) or (col>9) or (col<0):
+                    print("The answer should have two characters (each one a digit betweeen 0 and 9)")
+                    self.player_fires()
+                self.fire_selected(row=row, col=col)
 
     def fire_random(self):
+        self.select_random_row_and_col()
+        while self.shooter.screen.arr[self.row, self.col] != -1:
+            self.select_random_row_and_col()
+        self.post_fire()
+
+    def select_random_row_and_col(self):
         self.row = get_random_int(10)
         self.col = get_random_int(10)
-        self.select_new_random_if_it_was_already_tried()
-        self.post_fire()
 
     def fire_selected(self, row, col):
         self.row = row
         self.col = col
         self.ask_for_new_if_it_was_already_tried()
         self.post_fire()
-
-    def select_new_random_if_it_was_already_tried(self):
-        if self.shooter.screen.arr[self.row, self.col] != -1:
-            return self.fire_random()
 
     def ask_for_new_if_it_was_already_tried(self):
         if self.shooter.screen.arr[self.row, self.col] != -1:
@@ -96,12 +110,13 @@ class Game:
         return self.shootee.board.arr[self.row, self.col]
 
     def post_fire(self):
-        print("player 1 fired at ({}, {})".format(self.row, self.col))
-        print("this was a {} on player 2's board".format(str(int(self.result))))
+        if self.verbose=="yes":
+            print("{} fired at ({}, {}) which hit a {}".format(self.turn, self.row, self.col, self.result))
         self.update_fields()
-        self.print_all()
+        if self.verbose=="yes":
+            self.print_all()
+        self.shooter.shots_fired += 1
         self.check_win()
-        self.switch_turn()
 
     def update_fields(self):
         if self.result == 0:
@@ -126,16 +141,11 @@ class Game:
                (self.shootee.board.access(self.row, self.col + 1) in [0, 10, 15])
 
     def check_win(self):
-        for value in [1,2,3,4]:
+        for value in [1, 2, 3, 4]:
             if value in self.shootee.board.arr:
                 return
-        self.winner = deepcopy(self.turn)
-
-    def switch_turn(self):
-        if self.turn == "player1":
-            self.turn = "player2"
-        elif self.turn == "player2":
-            self.turn = "player1"
+        self.winner += deepcopy(self.turn)
+        self.number_of_shots_to_win = self.shooter.shots_fired
 
 """
 0: water

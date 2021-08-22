@@ -1,10 +1,9 @@
-from game import Game
+from game_analyzer import GameAnalyzer
 
 
 def main():
-    game = Game()
-    # game.play_human_vs_human()
-    game.play_machine_vs_machine()
+    game_analyzer = GameAnalyzer()
+    game_analyzer.play_n_games(100)
 
 
 if __name__ == "__main__":
