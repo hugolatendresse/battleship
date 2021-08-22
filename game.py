@@ -63,53 +63,35 @@ class Game:
             raise Exception
 
     def player_fires(self):
-        if self.game_type == "machine_vs_machine":
-            self.fire_random()
-        else:
-            choice = input("Where should {} fire? Input in XY format or press Enter to fire random".format(self.turn))
-            if choice=="":
-                self.fire_random()
+        self.row = -1
+        self.col = -1
+        while self.shooter.screen.access(self.row, self.col) != -1:
+            if self.game_type == "machine_vs_machine":
+                self.row, self.col = self.shooter.pick()
+            if self.game_type == "random_vs_random":
+                self.row, self.col = self.shooter.choose_random()
+            elif self.game_type == "human_vs_human":
+                while (self.row == -1) | (self.col == -1):
+                    choice = input("Where should {} fire? Input in XY format or press Enter to fire random".format(self.turn))
+                    if choice=="":
+                        self.row, self.col = self.shooter.choose_random()
+                    else:
+                        if len(choice)!=2:
+                            print("The answer should have two characters (each one a digit)")
+                        try:
+                            self.row = int(choice[0])
+                            self.col = int(choice[1])
+                        except Exception:
+                            print("The answer should have two characters (each one a digit)")
             else:
-                if len(choice)!=2:
-                    print("The answer should have two characters (each one a digit)")
-                    self.player_fires()
-                try:
-                    row=int(choice[0])
-                    col=int(choice[1])
-                except Exception:
-                    print("The answer should have two characters (each one a digit)")
-                    self.player_fires()
-                if (row>9) or (row<0) or (col>9) or (col<0):
-                    print("The answer should have two characters (each one a digit betweeen 0 and 9)")
-                    self.player_fires()
-                self.fire_selected(row=row, col=col)
-
-    def fire_random(self):
-        self.select_random_row_and_col()
-        while self.shooter.screen.arr[self.row, self.col] != -1:
-            self.select_random_row_and_col()
-        self.post_fire()
-
-    def select_random_row_and_col(self):
-        self.row = get_random_int(10)
-        self.col = get_random_int(10)
-
-    def fire_selected(self, row, col):
-        self.row = row
-        self.col = col
-        self.ask_for_new_if_it_was_already_tried()
-        self.post_fire()
-
-    def ask_for_new_if_it_was_already_tried(self):
-        if self.shooter.screen.arr[self.row, self.col] != -1:
-            "This location has already been shot at. Please try again."
-            return self.player_fires()
+                raise Exception("unrecognized game type")
+        self.fire()
 
     @property
     def result(self):
         return self.shootee.board.arr[self.row, self.col]
 
-    def post_fire(self):
+    def fire(self):
         if self.verbose=="yes":
             print("{} fired at ({}, {}) which hit a {}".format(self.turn, self.row, self.col, self.result))
         self.update_fields()
