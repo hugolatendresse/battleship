@@ -30,10 +30,10 @@ class Player:
 
     @property
     def is_all_diagonals_empty(self):
-        return (self.screen.arr[self.new_row + 1, self.new_col + 1] in [-1, 0]) & \
-               (self.screen.arr[self.new_row + 1, self.new_col - 1] in [-1, 0]) & \
-               (self.screen.arr[self.new_row - 1, self.new_col + 1] in [-1, 0]) & \
-               (self.screen.arr[self.new_row - 1, self.new_col - 1] in [-1, 0])
+        return (self.up_left in [-1, 0]) & \
+               (self.up_right in [-1, 0]) & \
+               (self.down_right in [-1, 0]) & \
+               (self.down_left in [-1, 0])
 
     @property
     def is_no_neighboor_sunk(self):
@@ -105,3 +105,31 @@ class Player:
             else:
                 return self.choose_random()
 
+
+    @property
+    def up_right(self):
+        try:
+            return self.screen.arr[self.new_row-1, self.new_col+1]
+        except Exception:
+            return 0
+
+    @property
+    def down_right(self):
+        try:
+            return self.screen.arr[self.new_row+1, self.new_col+1]
+        except Exception:
+            return 0
+
+    @property
+    def up_left(self):
+        try:
+            return self.screen.arr[self.new_row-1, self.new_col-1]
+        except Exception:
+            return 0
+
+    @property
+    def down_left(self):
+        try:
+            return self.screen.arr[self.new_row+1, self.new_col-1]
+        except Exception:
+            return 0
