@@ -1,0 +1,23 @@
+Battleship Game Simulator
+This repository contains a Python-based Battleship game simulator. The simulator is designed to play a game of Battleship between two AI players, with each player using a different strategy to play the game.
+
+Repository Structure
+Here's a brief overview of the key files in this repository:
+
+Player.py: This file defines a Player class that represents a player in the game. Each player has their own board and a screen to track shots at the opponent. The player class also includes methods for choosing where to shoot next and for handling the situation when a boat is hit.
+
+game.py: This file defines a Game class that represents a game of Battleship. It includes methods for updating the game state after each shot, checking if a boat is sunk, and sinking a boat.
+
+field.py: This file defines a Field class that represents a game board. It uses the NewBoatField class from boat_field.py to add boats to the field.
+
+boat_field.py: This file defines a NewBoatField class that is used to create a field with boats.
+
+get_random_int.py: This file contains a function for generating random integers, which is used in various places throughout the code.
+
+main.py: This is the main entry point for the simulator. It sets up the game and the players, and then runs the game.
+
+main.js: This is a JavaScript version of the game. It includes a function for adding a boat to a field.
+
+How to Run the Simulator
+To run the simulator, you need to have Python installed on your machine. You can then run the simulator using the following command:
+
