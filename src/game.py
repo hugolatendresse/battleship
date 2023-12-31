@@ -7,8 +7,7 @@ from src.get_random_int import get_random_int
 
 class Game:
     def __init__(self, game_type="machine_vs_machine", verbose='yes'):
-        """ game_type: machine_vs_machine or human_vs_human
-            verbose: zero, little, or yes"""
+        #TODO game_type: machine_vs_machine or human_vs_human or human vs machine, verbose: zero, little, or yes"""
         self.game_type = game_type
         self.player1 = Player()
         self.player2 = Player()

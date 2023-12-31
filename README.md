@@ -1,10 +1,10 @@
 # Battleship Game Simulator
 
-This repository contains a Python-based Battleship game simulator. The simulator is designed to play a game of Battleship between two AI players, with each player using a different strategy to play the game.
+This repository contains a Python-based Battleship game simulator. The simulator is designed to play a game of Battleship between two players. Each player can be AI, rule-based, or human.
 
 ## How to Run the Simulator
 
-To run the simulator, you need to have Python installed on your machine. You can then run the simulator using the following command:
+Run the simulator using the following command:
 
 ```sh
 python main.py
@@ -17,7 +17,6 @@ In the game state, different numbers are used to represent different states:
 
 0: water
 1-4: a boat part that wasn't hit
--1: unknown
 10: a boat part that was hit but not sunk
 15: a sunk boat
 
