@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from field import Field
+from src.field import Field
 
 
 class Player:

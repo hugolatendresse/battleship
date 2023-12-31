@@ -1,6 +1,6 @@
 import numpy as np
-from get_random_int import get_random_int
-from boat_field import NewBoatField
+from src.get_random_int import get_random_int
+from src.boat_field import NewBoatField
 
 class Field:
     def __init__(self):

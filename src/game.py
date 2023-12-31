@@ -1,9 +1,8 @@
+import numpy as np
 from copy import deepcopy
 
-import numpy as np
-
-from Player import Player
-from get_random_int import get_random_int
+from src.Player import Player
+from src.get_random_int import get_random_int
 
 
 class Game:
