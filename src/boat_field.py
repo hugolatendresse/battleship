@@ -1,5 +1,4 @@
 import numpy as np
-from src.get_random_int import get_random_int
 
 class NewBoatField:
     def __init__(self):

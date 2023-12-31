@@ -2,6 +2,15 @@ import random
 import numpy as np
 from src.field import Field
 
+# TODO separate the strategy from the skeleton of player, and implement a reinforcement learning AI in pick. Something like this:
+# def pick(self):
+#     if np.random.rand() < self.epsilon:  # Explore: choose a random action
+#         return self.choose_random()
+#     else:  # Exploit: choose the action with max Q-value
+#         state = self.screen.arr.flatten()
+#         action = np.argmax(self.q_table[state])
+#         return np.unravel_index(action, self.screen.arr.shape)
+
 
 class Player:
     def __init__(self, other_play_arr=None):
