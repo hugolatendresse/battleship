@@ -1,6 +1,6 @@
 import numpy as np
 
-from game_analyzer import GameAnalyzer
+from src.game_analyzer import GameAnalyzer
 
 
 def main():
